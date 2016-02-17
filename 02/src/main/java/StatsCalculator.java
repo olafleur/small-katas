@@ -53,7 +53,49 @@ public class StatsCalculator {
         return teams;
     }
 
-    List<String> getTeamsOverPointsAverage() {
-        return null;
+    static List<String> getTeamsOverPointsAverage() {
+        String csvFile = System.getProperty("user.dir") + "/src/main/resources/input.csv";
+        String line;
+        Double somme = 0.0;
+        int counter = 0;
+        List<String> teams = new ArrayList<>();
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
+
+            br.readLine();
+
+            while ((line = br.readLine()) != null) {
+                String[] truc = line.split(",");
+
+                int points = Integer.valueOf(truc[7]);
+
+                somme += points;
+                counter++;
+
+            }
+
+            // Lire l'autre fichier
+            double moyenne = somme / counter;
+
+            BufferedReader br2 = new BufferedReader(new FileReader(csvFile));
+
+            br2.readLine();
+
+            while ((line = br2.readLine()) != null) {
+                String[] truc = line.split(",");
+
+                int points = Integer.valueOf(truc[7]);
+
+                if(points > moyenne) {
+                   teams.add(truc[1]);
+                }
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return teams;
     }
 }
