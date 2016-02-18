@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class Main {
@@ -41,9 +42,41 @@ public class Main {
                 }
             }
 
+            for (char c : s2.toCharArray()) {
+                if (isReadingName == true) {
+                    if (c == ':') {
+                        // Name is read
+                        isReadingName = false;
+                        isReadingAmount = true;
+                    } else {
+                        currentName = currentName + c;
+                    }
+                } else if (isReadingAmount == true) {
+                    if (c == '|') {
+                        // Amount read
+                        isReadingName = true;
+                        isReadingAmount = false;
+                        dueMap.put(currentName, dueMap.get(currentName) - Integer.parseInt(currentAmount));
+                        currentName = "";
+                        currentAmount = "";
+                    } else {
+                        currentAmount = currentAmount + c;
+                    }
+                }
+            }
+
+            Iterator<String> i = dueMap.keySet().iterator();
+            while(i.hasNext()) {
+                Integer due = dueMap.get(i.next());
+                if (due == 0) {
+                    i.remove();
+                }
+            }
+
             for (String s : dueMap.keySet()) {
                 System.out.println(s + " : " + dueMap.get(s));
             }
+
         } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
