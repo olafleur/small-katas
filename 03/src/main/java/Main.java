@@ -3,8 +3,10 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class Main {
@@ -16,6 +18,11 @@ public class Main {
 
             boolean isReadingName = true, isReadingAmount = false;
 
+            List<String> vips = new ArrayList<>();
+            vips.add("rick");
+            vips.add("matthew");
+
+            Map<String, Integer> initialMap =  new HashMap<>();
             Map<String, Integer> dueMap = new HashMap<>();
             String currentName = "";
             String currentAmount = "";
@@ -33,6 +40,7 @@ public class Main {
                         // Amount read
                         isReadingName = true;
                         isReadingAmount = false;
+                        initialMap.put(currentName, Integer.parseInt(currentAmount));
                         dueMap.put(currentName, Integer.parseInt(currentAmount));
                         currentName = "";
                         currentAmount = "";
@@ -45,7 +53,7 @@ public class Main {
             for (char c : s2.toCharArray()) {
                 if (isReadingName == true) {
                     if (c == ':') {
-                        // Name is read
+                        // Amount is read
                         isReadingName = false;
                         isReadingAmount = true;
                     } else {
@@ -53,7 +61,7 @@ public class Main {
                     }
                 } else if (isReadingAmount == true) {
                     if (c == '|') {
-                        // Amount read
+                        // Name read
                         isReadingName = true;
                         isReadingAmount = false;
                         dueMap.put(currentName, dueMap.get(currentName) - Integer.parseInt(currentAmount));
@@ -67,8 +75,10 @@ public class Main {
 
             Iterator<String> i = dueMap.keySet().iterator();
             while(i.hasNext()) {
-                Integer due = dueMap.get(i.next());
-                if (due == 0) {
+                String name = i.next();
+                Integer due = dueMap.get(name);
+                // VIPs be VIPs :)
+                if (due == 0 || (vips.stream().filter((x) -> x.equals(name)).findFirst().isPresent() && due * 100 / initialMap.get(name) <= 10)) {
                     i.remove();
                 }
             }
