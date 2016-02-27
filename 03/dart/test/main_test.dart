@@ -1,14 +1,16 @@
 import 'package:test/test.dart';
-import 'dart:io';
 import 'dart:async';
-import 'dart:isolate';
 import '../bin/main.dart' as bin;
 
 main() {
-  test('dummy test', () async {
-    var result = bin.main(null);
-    print(result);
-    expect(result[0], 'rick : 50');
-    expect(result[1], 'josh : 5');
+  test("Prints expected result", () {
+    var stdoutContent = <String>[];
+    runZoned(() => bin.main(null),
+        zoneSpecification: new ZoneSpecification(
+            print: (Zone self, ZoneDelegate parent, Zone zone, String line) =>
+                stdoutContent.add(line)));
+
+    expect(stdoutContent[0], 'rick : 50');
+    expect(stdoutContent[1], 'josh : 5');
   });
 }
