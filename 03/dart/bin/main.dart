@@ -1,6 +1,6 @@
 import 'dart:io';
 
-main(List<String> args) {
+List<String> main(List<String> args) {
   var path = 'payments.dat';
   var s1 = new File(path).readAsLinesSync()[0];
   var s2 = new File(path).readAsLinesSync()[1];
@@ -80,7 +80,10 @@ main(List<String> args) {
 
   toRemove.forEach((String s) => dueMap.remove(s));
 
+  var result = <String>[];
   for (var s in dueMap.keys) {
-    print('$s : ${dueMap[s]}');
+    result.add('$s : ${dueMap[s]}');
   }
+
+  return result;
 }
