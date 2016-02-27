@@ -16,8 +16,6 @@ public class TeacherPresenter {
     public void fetchTeacher(int teacherId) {
         TeacherDto teacher = teacherService.findTeacherById(teacherId);
 
-
-
         if (teacher == null) {
             view.displayNoTeacher();
         } else {
