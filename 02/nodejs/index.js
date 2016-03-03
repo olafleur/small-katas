@@ -26,6 +26,7 @@ StatsCalculator.getTeamsUnderAgeAverage = function () {
     });
 
     lineReader.on('close', function () {
+        // Lire l'autre fichier
         var moyenne = somme / counter;
         counter = 0;
 
@@ -58,4 +59,54 @@ StatsCalculator.getTeamsUnderAgeAverage = function () {
     });
 };
 
+StatsCalculator.getTeamsOverPointsAverage = function () {
+    var lineReader = readline.createInterface({
+        input: fs.createReadStream('input.csv')
+    });
+
+    lineReader.on('line', function (line) {
+        if(counter > 0) {
+            var truc = line.split(",");
+
+            var points = parseInt(truc[7]);
+
+            somme += points;
+        }
+
+        counter++;
+    });
+
+    lineReader.on('close', function () {
+        // Lire l'autre fichier
+        var moyenne = somme / counter;
+        counter = 0;
+
+        var lineReader2 = readline.createInterface({
+            input: fs.createReadStream('input.csv')
+        });
+
+        lineReader2.on('line', function (line) {
+            if(counter > 0) {
+                var truc = line.split(",");
+
+                var points = parseInt(truc[7]);
+
+                if(points > moyenne) {
+                    teams.push(truc[1]);
+                }
+            }
+
+            counter++;
+        });
+
+        lineReader2.on('close', function() {
+            console.log("Les équipes dont le nombre de points moyen est au-dessus de la moyenne sont :");
+            for(var i = 0; i < teams.length; i++) {
+                console.log(teams[i]);
+            }
+        });
+    });
+};
+
 StatsCalculator.getTeamsUnderAgeAverage();
+StatsCalculator.getTeamsOverPointsAverage();
