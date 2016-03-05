@@ -101,7 +101,11 @@ namespace Application
 		}
 
 		static void Main(String[] args) {
-			Console.WriteLine ("Hello world!");
+            Console.WriteLine("Les équipes dont l'âge moyen est en dessous de la moyenne sont :");
+			MainClass.getTeamsUnderAgeAverage().ForEach(i => Console.WriteLine(i));
+            Console.WriteLine("");
+            Console.WriteLine("Les équipes dont le nombre de points moyen est au-dessus de la moyenne sont :");
+			MainClass.GetTeamsOverPointsAverage().ForEach(z => Console.WriteLine(z));
 		}
 	}
 }
